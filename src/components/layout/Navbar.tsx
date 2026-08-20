@@ -33,7 +33,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'features', label: 'Features', href: '/#features' },
   { id: 'solutions', label: 'Solutions', href: '/#solutions', hasDropdown: true, dropdownType: 'solutions' },
   { id: 'how-it-works', label: 'How it Works', href: '/#how-it-works' },
-  { id: 'pricing', label: 'Pricing', href: '/pricing' },
+  { id: 'pricing', label: 'Pricing', href: '/#pricing' },
   { id: 'resources', label: 'Resources', href: '/docs', hasDropdown: true, dropdownType: 'resources' },
 ];
 
@@ -203,18 +203,17 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-4 z-50 w-full px-4 sm:px-6 max-w-[1340px] mx-auto transition-all duration-300">
+    <header className="fixed top-6 inset-x-0 z-50 w-full px-4 sm:px-6 max-w-[1340px] mx-auto transition-all duration-300">
       {/* Outer Floating Glass Pillar */}
       <div
-        className={`relative flex items-center justify-between h-[72px] px-5 sm:px-7 rounded-[18px] transition-all duration-300 ${
+        className={`relative flex items-center justify-between h-[72px] px-5 sm:px-7 rounded-xl border transition-all duration-300 ${
           scrolled
-            ? 'bg-[#070F1E]/85 border border-[#38BDF8]/40 shadow-[0_12px_45px_rgba(0,0,0,0.6),0_0_30px_rgba(37,99,235,0.18)] backdrop-blur-xl'
-            : 'bg-[#070F1E]/70 border border-[#60A5FA]/35 shadow-[0_10px_40px_rgba(0,0,0,0.45),0_0_25px_rgba(37,99,235,0.1)] backdrop-blur-md'
+            ? 'bg-[#12141F]/95 border-[#1E2235]/80 shadow-[0_0_35px_rgba(34,211,238,0.15)] backdrop-blur-xl'
+            : 'bg-[#12141F]/80 border-[#1E2235]/60 shadow-[0_0_25px_rgba(59,130,246,0.1)] backdrop-blur-md'
         }`}
       >
-        {/* Subtle Ambient Top Border Highlight */}
-        <div className="absolute top-0 left-12 right-12 h-px bg-gradient-to-r from-transparent via-[#38BDF8]/40 to-transparent pointer-events-none" />
-
+        {/* Soft bottom gradient highlight */}
+        <div className="absolute bottom-0 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-[#22D3EE]/80 to-transparent shadow-[0_0_12px_rgba(34,211,238,0.6)]" />
         {/* 1. Logo Left */}
         <Link
           href="/"
@@ -271,7 +270,7 @@ export function Navbar() {
                       layoutId="activeNavUnderline"
                       className="absolute bottom-[-10px] left-0 right-0 h-[3px] rounded-full"
                       style={{
-                        background: 'linear-gradient(90deg, #22D3EE, #8B5CF6)',
+                        backgroundImage: 'linear-gradient(90deg, #22D3EE, #8B5CF6)',
                         boxShadow: '0 0 10px rgba(34, 211, 238, 0.5), 0 0 20px rgba(139, 92, 246, 0.3)',
                       }}
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
@@ -287,7 +286,7 @@ export function Navbar() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 8, scale: 0.96 }}
                       transition={{ duration: 0.18, ease: 'easeOut' }}
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-72 p-2 rounded-2xl bg-[#090D1A]/95 border border-[#38BDF8]/30 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_30px_rgba(37,99,235,0.15)] backdrop-blur-2xl z-50"
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-72 p-2 rounded-xl bg-[#12141F]/95 border border-[#1E2235] shadow-xl backdrop-blur-2xl z-50"
                     >
                       <div className="space-y-1">
                         {(item.dropdownType === 'solutions' ? SOLUTIONS_ITEMS : RESOURCES_ITEMS).map((subItem) => (
@@ -347,7 +346,7 @@ export function Navbar() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen((prev) => !prev)}
-          className="lg:hidden flex items-center justify-center h-10 w-10 rounded-xl border border-[#38BDF8]/30 bg-blue-500/10 text-slate-200 hover:text-white hover:border-[#38BDF8]/60 transition-colors"
+          className="lg:hidden flex items-center justify-center h-10 w-10 rounded-xl border border-[#1E2235] bg-[#12141F]/80 text-slate-200 hover:text-white hover:border-blue-500/50 transition-colors"
           aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
         >
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -362,7 +361,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="lg:hidden mt-3 p-5 rounded-[20px] bg-[#070F1E]/95 border border-[#38BDF8]/40 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(37,99,235,0.2)] backdrop-blur-2xl"
+            className="lg:hidden mt-3 p-5 rounded-xl bg-[#12141F]/95 border border-[#1E2235] shadow-2xl backdrop-blur-2xl"
           >
             <nav className="flex flex-col gap-2">
               {NAV_ITEMS.map((item) => {

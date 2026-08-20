@@ -15,6 +15,7 @@ import { motion } from 'framer-motion';
 import { LiveMonitoringSection } from '@/components/marketing/LiveMonitoring';
 import { ComplianceMarquee } from '@/components/marketing/ComplianceMarquee';
 import { Navbar } from '@/components/layout/Navbar';
+import { ScannerHub } from '@/components/marketing/ScannerHub';
 
 // Section wrapper — every section shares the same max-width container so the
 // page stays visually aligned at every breakpoint (nav, hero, features,
@@ -145,9 +146,9 @@ export default function LandingPage() {
       <Navbar />
 
       {/* ═══════════════════════ MAIN CONTENT ═══════════════════════ */}
-      <main className="flex-1 pt-4">
+      <main className="flex-1">
         {/* HERO SECTION */}
-        <section className="relative py-[clamp(3.5rem,6vw,7rem)] overflow-hidden bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.15),rgba(255,255,255,0))]">
+        <section className="relative pt-[clamp(8.5rem,10vw,11.5rem)] pb-[clamp(3.5rem,6vw,7rem)] overflow-hidden bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.15),rgba(255,255,255,0))]">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
           <div className="mx-auto w-full max-w-[1400px] px-[clamp(1.5rem,4vw,3rem)] relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-center gap-12 lg:gap-16">
@@ -321,6 +322,10 @@ export default function LandingPage() {
               </StaggerItem>
             ))}
           </StaggerContainer>
+
+          <SlideUp delay={0.2} className="mt-20 sm:mt-32 relative z-20">
+            <ScannerHub />
+          </SlideUp>
         </Section>
 
         {/* ═══════════════════════ PLATFORM — 2x2 STAT FEATURE GRID ═══════════════════════ */}
