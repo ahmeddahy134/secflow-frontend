@@ -48,19 +48,19 @@ const SOLUTIONS_ITEMS = [
     icon: Radar,
     title: 'DAST & Dependency SCA',
     desc: 'Dynamic security testing & SBOM analysis',
-    href: '/#features',
+    href: '/solutions/dast',
   },
   {
     icon: Brain,
     title: 'AI Remediation Agent',
     desc: 'Automated code fixes & pull requests',
-    href: '/#platform',
+    href: '/solutions/ai-agent',
   },
   {
     icon: Workflow,
-    title: 'Gated AWS Deployments',
-    desc: 'Cloud deployment gated by scan pass rates',
-    href: '/#how-it-works',
+    title: 'Multi Deployment',
+    desc: 'Secure deployments across every environment',
+    href: '/solutions/multi-deployment',
   },
 ];
 
