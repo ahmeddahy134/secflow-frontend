@@ -42,7 +42,7 @@ const SOLUTIONS_ITEMS = [
     icon: ShieldCheck,
     title: 'AppSec & SAST Scanning',
     desc: 'Static code analysis in isolated sandboxes',
-    href: '/#features',
+    href: '/solutions/appsec',
   },
   {
     icon: Radar,
@@ -155,6 +155,9 @@ export function Navbar() {
   const getActiveItemId = (): string => {
     if (pathname === '/pricing') {
       return 'pricing';
+    }
+    if (pathname.startsWith('/solutions')) {
+      return 'solutions';
     }
     if (
       pathname === '/docs' ||
