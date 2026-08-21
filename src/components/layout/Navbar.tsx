@@ -203,8 +203,9 @@ export function Navbar() {
   };
 
   return (
-    <header className="fixed top-6 inset-x-0 z-50 w-full px-4 sm:px-6 max-w-[1340px] mx-auto transition-all duration-300">
-      {/* Outer Floating Glass Pillar */}
+    <header className="fixed top-0 left-0 right-0 z-[100] w-full transition-all duration-300 pointer-events-none">
+      <div className="max-w-[1340px] mx-auto px-4 sm:px-6 pt-3 sm:pt-4 pointer-events-auto">
+        {/* Outer Floating Glass Pillar */}
       <div
         className={`relative flex items-center justify-between h-[72px] px-5 sm:px-7 rounded-xl border transition-all duration-300 ${
           scrolled
@@ -409,6 +410,7 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </header>
   );
 }

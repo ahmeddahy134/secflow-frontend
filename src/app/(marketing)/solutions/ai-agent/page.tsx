@@ -175,7 +175,7 @@ export default function AiAgentSolutionPage() {
       <Navbar />
 
       {/* ──────────────────────── MAIN CONTENT ──────────────────────── */}
-      <main className="flex-1 relative z-10 pt-6 pb-24">
+      <main className="flex-1 relative z-10 pt-24 sm:pt-28 pb-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* BREADCRUMB */}
           <nav className="flex items-center gap-2 text-xs text-slate-400 mb-8 max-w-7xl mx-auto">
