@@ -12,6 +12,7 @@ import { FolderGit2, Search, Plus, ExternalLink, GitBranch, Clock, Shield } from
 import { mockRepositories } from '@/data/mock-data';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/MotionWrapper';
 import { toast } from '@/store/toast-store';
+import { ConnectRepoModal } from '@/components/marketing/ConnectRepoModal';
 
 type StatusFilter = 'all' | 'connected' | 'failed';
 
@@ -19,7 +20,7 @@ export default function RepositoriesPage() {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
-  const [isConnecting, setIsConnecting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filtered = mockRepositories.filter((r) => {
     if (!r.name.toLowerCase().includes(search.toLowerCase())) return false;
@@ -28,14 +29,8 @@ export default function RepositoriesPage() {
     return true;
   });
 
-  const handleConnect = () => {
-    if (isConnecting) return;
-    setIsConnecting(true);
-    toast({ variant: 'info', title: 'Opening GitHub authorization...' });
-    setTimeout(() => {
-      toast({ variant: 'success', title: 'Repository sync started', description: 'SecFlow is indexing your GitHub organization.' });
-      setIsConnecting(false);
-    }, 900);
+  const handleModalSuccess = () => {
+    toast({ variant: 'success', title: 'Repository connected', description: 'Initial security scan has been queued and will start shortly.' });
   };
 
   const handleScanNow = (e: React.MouseEvent, repoName: string) => {
@@ -52,11 +47,10 @@ export default function RepositoriesPage() {
           <p className="text-sm text-slate-400 mt-1">Manage and scan your connected repositories</p>
         </div>
         <Button
-          onClick={handleConnect}
-          disabled={isConnecting}
+          onClick={() => setIsModalOpen(true)}
           className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-lg shadow-lg shadow-blue-500/20"
         >
-          <Plus className="h-4 w-4 mr-2" /> {isConnecting ? 'Connecting...' : 'Connect Repository'}
+          <Plus className="h-4 w-4 mr-2" /> Connect Repository
         </Button>
       </div>
 
@@ -145,6 +139,12 @@ export default function RepositoriesPage() {
           ))}
         </StaggerContainer>
       )}
+
+      <ConnectRepoModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleModalSuccess}
+      />
     </FadeIn>
   );
 }
