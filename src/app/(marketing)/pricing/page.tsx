@@ -19,7 +19,7 @@ export default function PricingPage() {
       <Navbar />
 
       {/* MAIN CONTENT */}
-      <main className="flex-1 pt-8 pb-20">
+      <main className="flex-1 pt-24 sm:pt-28 pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SlideUp className="text-center mb-12">
             <Badge variant="outline" className="border-blue-500/30 text-blue-400 mb-4 px-3 py-1 text-xs uppercase tracking-wider font-semibold">
