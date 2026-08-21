@@ -17,6 +17,7 @@ import {
   FileText,
   BookOpen,
   GitMerge,
+  Activity,
 } from 'lucide-react';
 
 interface NavItem {
@@ -32,8 +33,8 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'features', label: 'Features', href: '/#features' },
   { id: 'solutions', label: 'Solutions', href: '/#solutions', hasDropdown: true, dropdownType: 'solutions' },
   { id: 'how-it-works', label: 'How it Works', href: '/#how-it-works' },
-  { id: 'pricing', label: 'Pricing', href: '/#pricing' },
-  { id: 'resources', label: 'Resources', href: '/docs', hasDropdown: true, dropdownType: 'resources' },
+  { id: 'pricing', label: 'Pricing', href: '/pricing' },
+  { id: 'resources', label: 'Resources', href: '/resources', hasDropdown: true, dropdownType: 'resources' },
 ];
 
 const SOLUTIONS_ITEMS = [
@@ -68,19 +69,19 @@ const RESOURCES_ITEMS = [
     icon: BookOpen,
     title: 'Documentation',
     desc: 'Platform setup, repo integration & CLI usage',
-    href: '/docs',
+    href: '/resources?section=overview',
   },
   {
     icon: FileText,
-    title: 'Sample Report',
-    desc: 'Interactive vulnerability report preview with CVE & CVSS breakdown',
-    href: '/reports',
+    title: 'Security Reports & Aggregation',
+    desc: 'Sample CVE, CWE & compliance PDF exports',
+    href: '/resources?section=aggregation',
   },
   {
-    icon: GitMerge,
-    title: 'CI/CD Integration Guide',
-    desc: 'Setup automated pipelines with GitHub Actions, GitLab CI & Webhooks',
-    href: '/cicd',
+    icon: Activity,
+    title: 'AI Remediation & Patching',
+    desc: 'Automated code fix explanations & telemetry',
+    href: '/resources?section=fix-patches',
   },
   {
     icon: ShieldCheck,
@@ -159,10 +160,9 @@ export function Navbar() {
       return 'solutions';
     }
     if (
+      pathname.startsWith('/resources') ||
       pathname === '/docs' ||
-      pathname.startsWith('/reports') ||
-      pathname.startsWith('/ai-intelligence') ||
-      pathname.startsWith('/audit-log')
+      pathname.startsWith('/standards')
     ) {
       return 'resources';
     }

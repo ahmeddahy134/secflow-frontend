@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   BookOpen, Zap, GitBranch, Code, Radar, Network, Key, Box,
   Rocket, Database, FileText, ShieldCheck, ChevronRight,
   Terminal, Copy, Check, Info, AlertTriangle, Lightbulb, Lock,
-  CheckCircle2, Search, ArrowRight, Clock,
+  CheckCircle2, Search, ArrowRight, Clock, Activity, History,
 } from 'lucide-react';
+import { Navbar } from '@/components/layout/Navbar';
 
 const SIDEBAR_SECTIONS = [
   {
@@ -54,9 +57,11 @@ const SIDEBAR_SECTIONS = [
 function CodeBlock({ code, language = 'bash', title }: { code: string; language?: string; title?: string }) {
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
   return (
     <div className="rounded-xl border border-[#1E2235] overflow-hidden my-5 shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
@@ -138,8 +143,10 @@ const SECTION_META: Record<string, { badge: string; title: string; subtitle: str
   standards:          { badge: 'Compliance',         title: 'Security Standards',            subtitle: 'OWASP, CWE, CVE, SOC 2, ISO 27001, and PCI DSS compliance mapping.',          icon: ShieldCheck, updated: 'Aug 2026' },
 };
 
-export default function DocsPage() {
-  const [activeId, setActiveId] = useState('overview');
+function ResourcesContent() {
+  const searchParams = useSearchParams();
+  const initialSection = searchParams.get('section') || 'overview';
+  const [activeId, setActiveId] = useState(initialSection);
   const [search, setSearch] = useState('');
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     'Getting Started': true,
@@ -148,7 +155,14 @@ export default function DocsPage() {
     'Remediation & Compliance': true,
   });
 
-  const meta = SECTION_META[activeId];
+  useEffect(() => {
+    const sec = searchParams.get('section');
+    if (sec && SECTION_META[sec]) {
+      setActiveId(sec);
+    }
+  }, [searchParams]);
+
+  const meta = SECTION_META[activeId] || SECTION_META.overview;
   const PageIcon = meta.icon;
 
   const toggleSection = (title: string) => {
@@ -375,58 +389,84 @@ export default function DocsPage() {
   const nextItem = allItems[idx + 1];
 
   return (
-    <div className="flex h-full min-h-screen bg-[#0A0B14]">
-      <aside className="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 border-r border-[#1E2235] bg-[#0A0B14] sticky top-0 h-screen overflow-y-auto">
-        <div className="p-5 border-b border-[#1E2235]">
-          <div className="flex items-center gap-2.5 mb-4">
-            <div className="h-7 w-7 rounded-lg bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
-              <BookOpen className="h-3.5 w-3.5 text-blue-400" />
-            </div>
-            <span className="font-semibold text-white text-sm">Documentation</span>
-          </div>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
-            <input type="text" placeholder="Search docs..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-8 pr-3 py-2 text-xs bg-[#12141F] border border-[#1E2235] rounded-lg text-slate-300 placeholder-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors" />
-          </div>
-        </div>
-        <nav className="flex-1 p-3 space-y-1">
-          {filteredSections.map((section) => {
-            const SectionIcon = section.icon;
-            const isOpen = openSections[section.title] !== false;
-            return (
-              <div key={section.title}>
-                <button onClick={() => toggleSection(section.title)} className="w-full flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg hover:bg-[#12141F] transition-colors">
-                  <div className="flex items-center gap-2">
-                    <SectionIcon className={`h-3.5 w-3.5 ${section.color}`} />
-                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{section.title}</span>
-                  </div>
-                  <ChevronRight className={`h-3.5 w-3.5 text-slate-600 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`} />
-                </button>
-                {isOpen && (
-                  <div className="ml-2 mt-1 space-y-0.5">
-                    {section.items.map((item) => (
-                      <button key={item.id} onClick={() => setActiveId(item.id)} className={`w-full flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-left text-xs transition-all ${activeId === item.id ? 'bg-blue-500/15 text-blue-300 border border-blue-500/20 font-medium' : 'text-slate-500 hover:text-slate-200 hover:bg-[#12141F]'}`}>
-                        {activeId === item.id && <span className="h-1 w-1 rounded-full bg-blue-400 flex-shrink-0" />}
-                        {item.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-2 text-xs text-slate-400 mb-8 max-w-7xl mx-auto">
+        <Link href="/" className="hover:text-white transition-colors">
+          Home
+        </Link>
+        <ChevronRight className="h-3 w-3 text-slate-600" />
+        <span className="text-slate-200 font-medium">Resources</span>
+        <ChevronRight className="h-3 w-3 text-slate-600" />
+        <span className="text-cyan-400 font-medium">{meta.title}</span>
+      </nav>
+
+      <div className="flex flex-col lg:flex-row gap-8 min-h-[650px]">
+        {/* Left Sidebar */}
+        <aside className="w-full lg:w-64 xl:w-72 flex-shrink-0 rounded-2xl border border-[#1E2235] bg-[#0A0B14]/80 p-4 self-start">
+          <div className="pb-4 border-b border-[#1E2235]">
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="h-7 w-7 rounded-lg bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+                <BookOpen className="h-3.5 w-3.5 text-blue-400" />
               </div>
-            );
-          })}
-        </nav>
-        <div className="p-4 border-t border-[#1E2235]">
-          <a href="/reports" className="flex items-center gap-2 p-3 rounded-xl bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-500/20 hover:border-blue-500/40 transition-colors">
-            <FileText className="h-4 w-4 text-blue-400" />
-            <div><p className="text-xs font-semibold text-white">Sample Report</p><p className="text-[10px] text-slate-500">View a real scan output</p></div>
-          </a>
-        </div>
-      </aside>
-      <main className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto px-6 py-10">
-          <div className="mb-10 pb-8 border-b border-[#1E2235]">
-            <div className="flex items-center gap-2 mb-4">
+              <span className="font-semibold text-white text-sm">Public Resources</span>
+            </div>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+              <input
+                type="text"
+                placeholder="Search resources..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-8 pr-3 py-2 text-xs bg-[#12141F] border border-[#1E2235] rounded-lg text-slate-300 placeholder-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors"
+              />
+            </div>
+          </div>
+
+          <nav className="pt-3 space-y-1">
+            {filteredSections.map((section) => {
+              const SectionIcon = section.icon;
+              const isOpen = openSections[section.title] !== false;
+              return (
+                <div key={section.title}>
+                  <button
+                    onClick={() => toggleSection(section.title)}
+                    className="w-full flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg hover:bg-[#12141F] transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <SectionIcon className={`h-3.5 w-3.5 ${section.color}`} />
+                      <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{section.title}</span>
+                    </div>
+                    <ChevronRight className={`h-3.5 w-3.5 text-slate-600 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`} />
+                  </button>
+                  {isOpen && (
+                    <div className="ml-2 mt-1 space-y-0.5">
+                      {section.items.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => setActiveId(item.id)}
+                          className={`w-full flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-left text-xs transition-all ${
+                            activeId === item.id
+                              ? 'bg-blue-500/15 text-blue-300 border border-blue-500/20 font-medium'
+                              : 'text-slate-500 hover:text-slate-200 hover:bg-[#12141F]'
+                          }`}
+                        >
+                          {activeId === item.id && <span className="h-1 w-1 rounded-full bg-blue-400 flex-shrink-0" />}
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </nav>
+        </aside>
+
+        {/* Main Resource View */}
+        <main className="flex-1 rounded-2xl border border-[#1E2235] bg-[#0A0B14]/80 p-6 sm:p-8">
+          <div className="mb-8 pb-6 border-b border-[#1E2235]">
+            <div className="flex items-center gap-2 mb-3">
               <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">{meta.badge}</span>
               <ChevronRight className="h-3.5 w-3.5 text-slate-600" />
               <span className="text-xs text-slate-500">{meta.title}</span>
@@ -437,21 +477,68 @@ export default function DocsPage() {
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-white mb-2 tracking-tight">{meta.title}</h1>
-                <p className="text-slate-400 leading-relaxed">{meta.subtitle}</p>
+                <p className="text-slate-400 leading-relaxed text-sm">{meta.subtitle}</p>
                 <div className="flex items-center gap-1.5 mt-3 text-xs text-slate-600">
                   <Clock className="h-3 w-3" />
-                  <span>Last updated {meta.updated}</span>
+                  <span>Public documentation · Updated {meta.updated}</span>
                 </div>
               </div>
             </div>
           </div>
+
           <div key={activeId}>{DOC_CONTENT[activeId] ?? <p className="text-slate-400">Content coming soon.</p>}</div>
-          <div className="mt-16 pt-8 border-t border-[#1E2235] flex items-center justify-between">
-            {prevItem ? (<button onClick={() => setActiveId(prevItem.id)} className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors group"><ChevronRight className="h-4 w-4 rotate-180 group-hover:-translate-x-1 transition-transform" /><span>{prevItem.label}</span></button>) : <span />}
-            {nextItem ? (<button onClick={() => setActiveId(nextItem.id)} className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors group ml-auto"><span>{nextItem.label}</span><ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" /></button>) : <span />}
+
+          <div className="mt-12 pt-6 border-t border-[#1E2235] flex items-center justify-between">
+            {prevItem ? (
+              <button
+                onClick={() => setActiveId(prevItem.id)}
+                className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors group"
+              >
+                <ChevronRight className="h-4 w-4 rotate-180 group-hover:-translate-x-1 transition-transform" />
+                <span>{prevItem.label}</span>
+              </button>
+            ) : (
+              <span />
+            )}
+            {nextItem ? (
+              <button
+                onClick={() => setActiveId(nextItem.id)}
+                className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors group ml-auto"
+              >
+                <span>{nextItem.label}</span>
+                <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            ) : (
+              <span />
+            )}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+export default function ResourcesPage() {
+  return (
+    <div className="flex flex-col min-h-screen bg-[var(--color-canvas)] text-slate-200 overflow-x-hidden">
+      <Navbar />
+
+      <main className="flex-1 pt-24 sm:pt-28 pb-20">
+        <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading resources...</div>}>
+          <ResourcesContent />
+        </Suspense>
+      </main>
+
+      <footer className="border-t border-[#1E2235] bg-[#0A0B14] py-8">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <span>© 2026 SecFlow Platform. All rights reserved.</span>
+          <div className="flex gap-5">
+            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+            <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
+            <Link href="/standards" className="hover:text-white transition-colors">Standards</Link>
           </div>
         </div>
-      </main>
+      </footer>
     </div>
   );
 }
