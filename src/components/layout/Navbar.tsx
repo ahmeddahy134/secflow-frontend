@@ -16,8 +16,7 @@ import {
   Workflow,
   FileText,
   BookOpen,
-  Activity,
-  History,
+  GitMerge,
 } from 'lucide-react';
 
 interface NavItem {
@@ -68,26 +67,26 @@ const RESOURCES_ITEMS = [
   {
     icon: BookOpen,
     title: 'Documentation',
-    desc: 'Guides, setup instructions & CLI tools',
+    desc: 'Platform setup, repo integration & CLI usage',
     href: '/docs',
   },
   {
     icon: FileText,
-    title: 'Security Reports',
-    desc: 'Sample CVE, CWE & compliance PDF exports',
+    title: 'Sample Report',
+    desc: 'Interactive vulnerability report preview with CVE & CVSS breakdown',
     href: '/reports',
   },
   {
-    icon: Activity,
-    title: 'AI Intelligence',
-    desc: 'Live vulnerability telemetry dashboard',
-    href: '/ai-intelligence',
+    icon: GitMerge,
+    title: 'CI/CD Integration Guide',
+    desc: 'Setup automated pipelines with GitHub Actions, GitLab CI & Webhooks',
+    href: '/cicd',
   },
   {
-    icon: History,
-    title: 'Audit Logs',
-    desc: 'Full record of scans, overrides & deploys',
-    href: '/audit-log',
+    icon: ShieldCheck,
+    title: 'Security Standards',
+    desc: 'Compliance mapping across OWASP Top 10, CWE & industry benchmarks',
+    href: '/standards',
   },
 ];
 
@@ -206,11 +205,10 @@ export function Navbar() {
     <header className="fixed top-6 inset-x-0 z-50 w-full px-4 sm:px-6 max-w-[1340px] mx-auto transition-all duration-300">
       {/* Outer Floating Glass Pillar */}
       <div
-        className={`relative flex items-center justify-between h-[72px] px-5 sm:px-7 rounded-xl border transition-all duration-300 ${
-          scrolled
-            ? 'bg-[#12141F]/95 border-[#1E2235]/80 shadow-[0_0_35px_rgba(34,211,238,0.15)] backdrop-blur-xl'
-            : 'bg-[#12141F]/80 border-[#1E2235]/60 shadow-[0_0_25px_rgba(59,130,246,0.1)] backdrop-blur-md'
-        }`}
+        className={`relative flex items-center justify-between h-[72px] px-5 sm:px-7 rounded-xl border transition-all duration-300 ${scrolled
+          ? 'bg-[#12141F]/95 border-[#1E2235]/80 shadow-[0_0_35px_rgba(34,211,238,0.15)] backdrop-blur-xl'
+          : 'bg-[#12141F]/80 border-[#1E2235]/60 shadow-[0_0_25px_rgba(59,130,246,0.1)] backdrop-blur-md'
+          }`}
       >
         {/* Soft bottom gradient highlight */}
         <div className="absolute bottom-0 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-[#22D3EE]/80 to-transparent shadow-[0_0_12px_rgba(34,211,238,0.6)]" />
@@ -246,21 +244,19 @@ export function Navbar() {
                 <Link
                   href={item.href}
                   onClick={() => handleLinkClick(item.id, item.href)}
-                  className={`relative flex items-center gap-1.5 px-3.5 py-2 text-[14px] font-medium transition-all duration-250 ease-out select-none group ${
-                    isActive
-                      ? 'text-[#22D3EE] font-semibold'
-                      : 'text-slate-300 hover:text-[#22D3EE] hover:-translate-y-[1px]'
-                  }`}
+                  className={`relative flex items-center gap-1.5 px-3.5 py-2 text-[14px] font-medium transition-all duration-250 ease-out select-none group ${isActive
+                    ? 'text-[#22D3EE] font-semibold'
+                    : 'text-slate-300 hover:text-[#22D3EE] hover:-translate-y-[1px]'
+                    }`}
                 >
                   <span>{item.label}</span>
 
                   {item.hasDropdown && (
                     <ChevronDown
-                      className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                        activeDropdown === item.dropdownType
-                          ? 'rotate-180 text-[#22D3EE]'
-                          : 'text-slate-400 group-hover:text-[#22D3EE]'
-                      }`}
+                      className={`h-3.5 w-3.5 transition-transform duration-200 ${activeDropdown === item.dropdownType
+                        ? 'rotate-180 text-[#22D3EE]'
+                        : 'text-slate-400 group-hover:text-[#22D3EE]'
+                        }`}
                     />
                   )}
 
@@ -371,11 +367,10 @@ export function Navbar() {
                     key={item.id}
                     href={item.href}
                     onClick={() => handleLinkClick(item.id, item.href)}
-                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-blue-500/15 border border-cyan-500/30 text-[#22D3EE] font-semibold'
-                        : 'text-slate-300 hover:bg-slate-800/50 hover:text-white'
-                    }`}
+                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-colors ${isActive
+                      ? 'bg-blue-500/15 border border-cyan-500/30 text-[#22D3EE] font-semibold'
+                      : 'text-slate-300 hover:bg-slate-800/50 hover:text-white'
+                      }`}
                   >
                     <span>{item.label}</span>
                     {item.hasDropdown && <ChevronDown className="h-4 w-4 text-slate-500" />}
